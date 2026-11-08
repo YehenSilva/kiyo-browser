@@ -1,0 +1,27 @@
+# Rust / Tauri build files
+**/target/
+
+# Node dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Debug files
+*.pdb
+*.rlib
+*.rmeta
+
+# IDE files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db

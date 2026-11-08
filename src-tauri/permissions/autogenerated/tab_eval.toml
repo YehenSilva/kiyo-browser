@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-tab-eval"
+description = "Enables the tab_eval command without any pre-configured scope."
+commands.allow = ["tab_eval"]
+
+[[permission]]
+identifier = "deny-tab-eval"
+description = "Denies the tab_eval command without any pre-configured scope."
+commands.deny = ["tab_eval"]

@@ -1,0 +1,38 @@
+fn main() {
+    let attributes = tauri_build::Attributes::new()
+        .app_manifest(tauri_build::AppManifest::new().commands(&[
+            "tab_open",
+            "tab_show",
+            "tab_close",
+            "tab_nav",
+            "set_sidebar",
+            "set_top_bar",
+            "tab_eval",
+            "tab_devtools",
+            "request_glance",
+            "tab_focused",
+            "autofill_field",
+            "autofill_show",
+            "autofill_select",
+            "autofill_dismiss",
+            "new_window",
+            "glance_open",
+            "glance_close",
+            "set_glance_bounds",
+            "win_close",
+            "win_minimize",
+            "win_maximize",
+            "win_drag",
+            "open_download_file",
+            "show_download_folder",
+            "clear_profile_data",
+            "tab_zoom_changed",
+            "open_popup_window",
+            "close_popup_window",
+            "oauth_popup_post_message",
+            "oauth_popup_navigate_opener",
+            "show_context_menu",
+            "toggle_command_palette",
+        ]));
+    tauri_build::try_build(attributes).expect("failed to run tauri-build");
+}

@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-oauth-popup-post-message"
+description = "Enables the oauth_popup_post_message command without any pre-configured scope."
+commands.allow = ["oauth_popup_post_message"]
+
+[[permission]]
+identifier = "deny-oauth-popup-post-message"
+description = "Denies the oauth_popup_post_message command without any pre-configured scope."
+commands.deny = ["oauth_popup_post_message"]

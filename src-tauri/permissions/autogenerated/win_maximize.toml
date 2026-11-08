@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-win-maximize"
+description = "Enables the win_maximize command without any pre-configured scope."
+commands.allow = ["win_maximize"]
+
+[[permission]]
+identifier = "deny-win-maximize"
+description = "Denies the win_maximize command without any pre-configured scope."
+commands.deny = ["win_maximize"]

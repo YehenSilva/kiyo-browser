@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-autofill-dismiss"
+description = "Enables the autofill_dismiss command without any pre-configured scope."
+commands.allow = ["autofill_dismiss"]
+
+[[permission]]
+identifier = "deny-autofill-dismiss"
+description = "Denies the autofill_dismiss command without any pre-configured scope."
+commands.deny = ["autofill_dismiss"]

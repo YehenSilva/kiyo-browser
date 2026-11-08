@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-autofill-field"
+description = "Enables the autofill_field command without any pre-configured scope."
+commands.allow = ["autofill_field"]
+
+[[permission]]
+identifier = "deny-autofill-field"
+description = "Denies the autofill_field command without any pre-configured scope."
+commands.deny = ["autofill_field"]

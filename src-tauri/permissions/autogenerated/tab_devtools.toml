@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-tab-devtools"
+description = "Enables the tab_devtools command without any pre-configured scope."
+commands.allow = ["tab_devtools"]
+
+[[permission]]
+identifier = "deny-tab-devtools"
+description = "Denies the tab_devtools command without any pre-configured scope."
+commands.deny = ["tab_devtools"]

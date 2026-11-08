@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Autofill</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      height: 100%;
+      overflow: hidden;
+      background: #1b1a21;
+      color: #efedf5;
+      font: 12.5px/1.35 "Segoe UI Variable", "Segoe UI", system-ui, sans-serif;
+      user-select: none;
+      -webkit-font-smoothing: antialiased;
+      border: 1px solid #2a2833;
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.65);
+    }
+    #list {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      overflow-y: auto;
+    }
+    .item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      cursor: pointer;
+      transition: background 0.1s, color 0.1s;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
+    .item:last-child {
+      border-bottom: 0;
+    }
+    .item.active, .item:hover {
+      background: #2e2b38;
+      color: #ffffff;
+    }
+    .item svg {
+      width: 15px;
+      height: 15px;
+      fill: none;
+      stroke: #9b98aa;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      flex: none;
+      transition: stroke 0.1s;
+    }
+    .item.active svg, .item:hover svg {
+      stroke: #f0a8a0;
+    }
+    .text-wrap {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+    .text {
+      font-weight: 600;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .sub {
+      font-size: 11px;
+      color: #6d6a7c;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .manage-row {
+      background: #16151a;
+      color: #9b98aa;
+      font-size: 11.5px;
+      border-top: 1px solid #2a2833;
+      padding: 7px 12px;
+      margin-top: auto;
+    }
+    .manage-row svg {
+      stroke: #6d6a7c;
+    }
+    .manage-row.active, .manage-row:hover {
+      background: #25232d;
+      color: #efedf5;
+    }
+    .manage-row.active svg, .manage-row:hover svg {
+      stroke: #f0a8a0;
+    }
+    ::-webkit-scrollbar {
+      width: 0;
+    }
+  </style>
+</head>
+<body>
+  <div id="list"></div>
+  <script>
+    const T = window.__TAURI__;
+    const invoke = T && T.core && T.core.invoke;
+    const listen = T && T.event && T.event.listen;
+    let currentItems = [];
+    let selectedIdx = 0;
+
+    const icons = {
+      key: '<svg viewBox="0 0 24 24"><circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M16 7l3 3"/></svg>',
+      user: '<svg viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
+      lock: '<svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>',
+      gear: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/></svg>'
+    };
+
+    function escapeHtml(s) {
+      return String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
+
+    function render() {
+      const list = document.getElementById('list');
+      list.innerHTML = '';
+      currentItems.forEach((it, idx) => {
+        const row = document.createElement('div');
+        const isManage = it.action === 'manage';
+        row.className = 'item' + (isManage ? ' manage-row' : '') + (idx === selectedIdx ? ' active' : '');
+        const ic = it.action === 'unlock' ? icons.lock : (isManage ? icons.gear : icons.user);
+        row.innerHTML = ic +
+          '<div class="text-wrap"><div class="text">' + escapeHtml(it.text) + '</div>' +
+          (it.sub ? '<div class="sub">' + escapeHtml(it.sub) + '</div>' : '') +
+          '</div>';
+        row.addEventListener('click', () => choose(idx));
+        row.addEventListener('mouseenter', () => { selectedIdx = idx; updateActive(); });
+        list.appendChild(row);
+      });
+    }
+
+    function updateActive() {
+      const rows = document.querySelectorAll('.item');
+      rows.forEach((r, i) => r.classList.toggle('active', i === selectedIdx));
+    }
+
+    function choose(idx) {
+      const item = currentItems[idx];
+      if (!item || !invoke) return;
+      invoke('autofill_select', {
+        action: item.action,
+        index: typeof item.index === 'number' ? item.index : null
+      }).catch(console.error);
+    }
+
+    window.populate = function(items) {
+      currentItems = items || [];
+      selectedIdx = 0;
+      render();
+    };
+
+    if (listen) {
+      listen('autofill-populate', ev => {
+        window.populate(ev.payload);
+      });
+    }
+
+    window.addEventListener('keydown', e => {
+      if (!currentItems.length) return;
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        selectedIdx = (selectedIdx + 1) % currentItems.length;
+        updateActive();
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        selectedIdx = (selectedIdx - 1 + currentItems.length) % currentItems.length;
+        updateActive();
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        if (selectedIdx >= 0) choose(selectedIdx);
+      } else if (e.key === 'Escape') {
+        e.preventDefault();
+        if (invoke) invoke('autofill_dismiss').catch(console.error);
+      }
+    });
+  </script>
+</body>
+</html>
+

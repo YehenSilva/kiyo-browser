@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-request-glance"
+description = "Enables the request_glance command without any pre-configured scope."
+commands.allow = ["request_glance"]
+
+[[permission]]
+identifier = "deny-request-glance"
+description = "Denies the request_glance command without any pre-configured scope."
+commands.deny = ["request_glance"]

@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-oauth-popup-navigate-opener"
+description = "Enables the oauth_popup_navigate_opener command without any pre-configured scope."
+commands.allow = ["oauth_popup_navigate_opener"]
+
+[[permission]]
+identifier = "deny-oauth-popup-navigate-opener"
+description = "Denies the oauth_popup_navigate_opener command without any pre-configured scope."
+commands.deny = ["oauth_popup_navigate_opener"]

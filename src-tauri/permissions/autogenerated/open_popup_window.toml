@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-open-popup-window"
+description = "Enables the open_popup_window command without any pre-configured scope."
+commands.allow = ["open_popup_window"]
+
+[[permission]]
+identifier = "deny-open-popup-window"
+description = "Denies the open_popup_window command without any pre-configured scope."
+commands.deny = ["open_popup_window"]
